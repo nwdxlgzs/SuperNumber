@@ -1,0 +1,275 @@
+{
+  "version": 3,
+  "format": {
+    "e": 11,
+    "m": 52,
+    "nan": 1
+  },
+  "main": {
+    "nodes": [
+      {
+        "id": "n1",
+        "type": "comment",
+        "x": 40,
+        "y": 20,
+        "cfg": {
+          "text": "Transformer 组件玩具（tensor 算子速览）\n上支路: mat → SDPA → residual → LayerNorm → GELU → residual → out\n下支路: sin_pe → residual → out\n完整 Qwen3 结构见 qwen3_toy.json",
+          "portValues": {}
+        },
+        "inputs": {},
+        "inputFromPorts": {}
+      },
+      {
+        "id": "n2",
+        "type": "mat_lit",
+        "x": 40,
+        "y": 140,
+        "cfg": {
+          "value": "0.1,0.2,0.3,0.4; 0.4,0.3,0.2,0.1; 0.0,0.5,0.0,0.5; 0.5,0.0,0.5,0.0",
+          "portValues": {}
+        },
+        "inputs": {},
+        "inputFromPorts": {},
+        "note": "输入矩阵"
+      },
+      {
+        "id": "n3",
+        "type": "attention_sdp",
+        "x": 320,
+        "y": 140,
+        "cfg": {
+          "scale": "auto",
+          "causal": 0,
+          "portValues": {}
+        },
+        "inputs": {
+          "q": "n2",
+          "k": "n2",
+          "v": "n2"
+        },
+        "inputFromPorts": {
+          "q": "out",
+          "k": "out",
+          "v": "out"
+        },
+        "note": "SDPA 注意力"
+      },
+      {
+        "id": "n4",
+        "type": "residual_add",
+        "x": 560,
+        "y": 140,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n2",
+          "b": "n3"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "note": "残差连接 1"
+      },
+      {
+        "id": "n5",
+        "type": "layer_norm",
+        "x": 780,
+        "y": 140,
+        "cfg": {
+          "eps": "1e-5",
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n4"
+        },
+        "inputFromPorts": {
+          "a": "out"
+        },
+        "note": "LayerNorm"
+      },
+      {
+        "id": "n6",
+        "type": "gelu",
+        "x": 1000,
+        "y": 140,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n5"
+        },
+        "inputFromPorts": {
+          "a": "out"
+        },
+        "note": "GELU"
+      },
+      {
+        "id": "n7",
+        "type": "residual_add",
+        "x": 1220,
+        "y": 140,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n5",
+          "b": "n6"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "note": "残差连接 2"
+      },
+      {
+        "id": "n8",
+        "type": "out",
+        "x": 1460,
+        "y": 140,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "in": "n7"
+        },
+        "inputFromPorts": {
+          "in": "out"
+        },
+        "note": "主路径输出"
+      },
+      {
+        "id": "n9",
+        "type": "sin_pe",
+        "x": 40,
+        "y": 360,
+        "cfg": {
+          "seq": "4",
+          "dim": "4",
+          "portValues": {}
+        },
+        "inputs": {},
+        "inputFromPorts": {},
+        "note": "正弦位置编码"
+      },
+      {
+        "id": "n10",
+        "type": "residual_add",
+        "x": 320,
+        "y": 360,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n2",
+          "b": "n9"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "note": "位置编码残差"
+      },
+      {
+        "id": "n11",
+        "type": "out",
+        "x": 560,
+        "y": 360,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "in": "n10"
+        },
+        "inputFromPorts": {
+          "in": "out"
+        },
+        "note": "位置路径输出"
+      }
+    ],
+    "wires": [
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n3",
+        "toPort": "q"
+      },
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n3",
+        "toPort": "k"
+      },
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n3",
+        "toPort": "v"
+      },
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n4",
+        "toPort": "a"
+      },
+      {
+        "from": "n3",
+        "fromPort": "out",
+        "to": "n4",
+        "toPort": "b"
+      },
+      {
+        "from": "n4",
+        "fromPort": "out",
+        "to": "n5",
+        "toPort": "a"
+      },
+      {
+        "from": "n5",
+        "fromPort": "out",
+        "to": "n6",
+        "toPort": "a"
+      },
+      {
+        "from": "n5",
+        "fromPort": "out",
+        "to": "n7",
+        "toPort": "a"
+      },
+      {
+        "from": "n6",
+        "fromPort": "out",
+        "to": "n7",
+        "toPort": "b"
+      },
+      {
+        "from": "n7",
+        "fromPort": "out",
+        "to": "n8",
+        "toPort": "in"
+      },
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n10",
+        "toPort": "a"
+      },
+      {
+        "from": "n9",
+        "fromPort": "out",
+        "to": "n10",
+        "toPort": "b"
+      },
+      {
+        "from": "n10",
+        "fromPort": "out",
+        "to": "n11",
+        "toPort": "in"
+      }
+    ]
+  },
+  "functions": {},
+  "nodeSeq": 12,
+  "fnSeq": 1
+}

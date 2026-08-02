@@ -1,0 +1,639 @@
+{
+  "version": 3,
+  "format": {
+    "e": 11,
+    "m": 52,
+    "nan": 1
+  },
+  "main": {
+    "nodes": [
+      {
+        "id": "n_entry",
+        "type": "entry",
+        "op": "entry",
+        "x": -31.652404720390646,
+        "y": 35.465064479218746,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "程序入口（exec 起点）"
+      },
+      {
+        "id": "n_cmt1",
+        "type": "comment",
+        "op": null,
+        "x": 171.11466592156245,
+        "y": -168.09645263921882,
+        "cfg": {
+          "text": "RSA 玩具示例（大整数 / powmod / modinv）\np=61, q=53 → n=p·q=3233\nφ=(p−1)(q−1)=3120\ne=17, d=modinv(e,φ)=2753\nm=65 → c=m^e mod n → m′=c^d mod n",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false
+      },
+      {
+        "id": "n_p",
+        "type": "const_bi",
+        "op": null,
+        "x": -21.6755133596094,
+        "y": 227.39444071960932,
+        "cfg": {
+          "value": "61",
+          "base": 10,
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "素数 p = 61"
+      },
+      {
+        "id": "n_q",
+        "type": "const_bi",
+        "op": null,
+        "x": -23.48947096039065,
+        "y": 381.8601748792188,
+        "cfg": {
+          "value": "53",
+          "base": 10,
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "素数 q = 53"
+      },
+      {
+        "id": "n_e",
+        "type": "const_bi",
+        "op": null,
+        "x": -16.23355751960939,
+        "y": 677.8167193600002,
+        "cfg": {
+          "value": "17",
+          "base": 10,
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "公钥指数 e = 17"
+      },
+      {
+        "id": "n_m",
+        "type": "const_bi",
+        "op": null,
+        "x": -23.48955399804691,
+        "y": 530.2539459184375,
+        "cfg": {
+          "value": "65",
+          "base": 10,
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "明文 m = 65"
+      },
+      {
+        "id": "n_one",
+        "type": "const_bi",
+        "op": null,
+        "x": -14.95725568000006,
+        "y": 830.5445601592189,
+        "cfg": {
+          "value": "1",
+          "base": 10,
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "常量 1"
+      },
+      {
+        "id": "n_n",
+        "type": "bin",
+        "op": "mul",
+        "x": 248.25528527921875,
+        "y": 303.72034975843746,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_p",
+          "b": "n_q"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "模数 n = p·q"
+      },
+      {
+        "id": "n_pm1",
+        "type": "bin",
+        "op": "sub",
+        "x": 253.69724111921875,
+        "y": 424.6272040023437,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_p",
+          "b": "n_one"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "p−1"
+      },
+      {
+        "id": "n_qm1",
+        "type": "bin",
+        "op": "sub",
+        "x": 262.7670706419532,
+        "y": 556.3720847984375,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_q",
+          "b": "n_one"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "q−1"
+      },
+      {
+        "id": "n_phi",
+        "type": "bin",
+        "op": "mul",
+        "x": 457.32523935843744,
+        "y": 460.0922684815625,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_pm1",
+          "b": "n_qm1"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "欧拉函数 φ(n)=(p−1)(q−1)"
+      },
+      {
+        "id": "n_d",
+        "type": "crypto",
+        "op": "modinv",
+        "x": 691.7907659239062,
+        "y": 509.06995407921875,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": 2,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_e",
+          "b": "n_phi"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "私钥 d = e⁻¹ mod φ"
+      },
+      {
+        "id": "n_c",
+        "type": "crypto",
+        "op": "powmod",
+        "x": 659.1390308839062,
+        "y": 332.7440035215625,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": 3,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_m",
+          "b": "n_e",
+          "c": "n_n"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out",
+          "c": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "密文 c = m^e mod n"
+      },
+      {
+        "id": "n_m2",
+        "type": "crypto",
+        "op": "powmod",
+        "x": 916.3258675200001,
+        "y": 419.04684544,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": 3,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "n_c",
+          "b": "n_d",
+          "c": "n_n"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "b": "out",
+          "c": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "解密 m′ = c^d mod n"
+      },
+      {
+        "id": "n_out_n",
+        "type": "out",
+        "op": null,
+        "x": 809.3007083207813,
+        "y": 137.41750784,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "exec": "n_entry",
+          "in": "n_n"
+        },
+        "inputFromPorts": {
+          "exec": "exec",
+          "in": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输出 n"
+      },
+      {
+        "id": "n_out_phi",
+        "type": "out",
+        "op": null,
+        "x": 1010.6530744007812,
+        "y": 284.5349355207813,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "exec": "n_out_n",
+          "in": "n_phi"
+        },
+        "inputFromPorts": {
+          "exec": "exec",
+          "in": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输出 φ"
+      },
+      {
+        "id": "n_out_d",
+        "type": "out",
+        "op": null,
+        "x": 1257.8166363223438,
+        "y": 407.07129344000003,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "exec": "n_out_phi",
+          "in": "n_d"
+        },
+        "inputFromPorts": {
+          "exec": "exec",
+          "in": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输出 d"
+      },
+      {
+        "id": "n_out_c",
+        "type": "out",
+        "op": null,
+        "x": 1352.1440092784376,
+        "y": 572.3286292792188,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "exec": "n_out_d",
+          "in": "n_c"
+        },
+        "inputFromPorts": {
+          "exec": "exec",
+          "in": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输出密文 c"
+      },
+      {
+        "id": "n_out_m",
+        "type": "out",
+        "op": null,
+        "x": 1528.1005537592189,
+        "y": 743.9810755184376,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "exec": "n_out_c",
+          "in": "n_m2"
+        },
+        "inputFromPorts": {
+          "exec": "exec",
+          "in": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输出还原明文"
+      },
+      {
+        "id": "n_cmt2",
+        "type": "comment",
+        "op": null,
+        "x": 388.3936880015625,
+        "y": -160.98312607843764,
+        "cfg": {
+          "text": "期望输出:\nn=3233\nφ=3120\nd=2753\nc=2790\n明文还原=65",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false
+      }
+    ],
+    "wires": [
+      {
+        "from": "n_p",
+        "fromPort": "out",
+        "to": "n_n",
+        "toPort": "a"
+      },
+      {
+        "from": "n_q",
+        "fromPort": "out",
+        "to": "n_n",
+        "toPort": "b"
+      },
+      {
+        "from": "n_p",
+        "fromPort": "out",
+        "to": "n_pm1",
+        "toPort": "a"
+      },
+      {
+        "from": "n_one",
+        "fromPort": "out",
+        "to": "n_pm1",
+        "toPort": "b"
+      },
+      {
+        "from": "n_q",
+        "fromPort": "out",
+        "to": "n_qm1",
+        "toPort": "a"
+      },
+      {
+        "from": "n_one",
+        "fromPort": "out",
+        "to": "n_qm1",
+        "toPort": "b"
+      },
+      {
+        "from": "n_pm1",
+        "fromPort": "out",
+        "to": "n_phi",
+        "toPort": "a"
+      },
+      {
+        "from": "n_qm1",
+        "fromPort": "out",
+        "to": "n_phi",
+        "toPort": "b"
+      },
+      {
+        "from": "n_e",
+        "fromPort": "out",
+        "to": "n_d",
+        "toPort": "a"
+      },
+      {
+        "from": "n_phi",
+        "fromPort": "out",
+        "to": "n_d",
+        "toPort": "b"
+      },
+      {
+        "from": "n_m",
+        "fromPort": "out",
+        "to": "n_c",
+        "toPort": "a"
+      },
+      {
+        "from": "n_e",
+        "fromPort": "out",
+        "to": "n_c",
+        "toPort": "b"
+      },
+      {
+        "from": "n_n",
+        "fromPort": "out",
+        "to": "n_c",
+        "toPort": "c"
+      },
+      {
+        "from": "n_c",
+        "fromPort": "out",
+        "to": "n_m2",
+        "toPort": "a"
+      },
+      {
+        "from": "n_d",
+        "fromPort": "out",
+        "to": "n_m2",
+        "toPort": "b"
+      },
+      {
+        "from": "n_n",
+        "fromPort": "out",
+        "to": "n_m2",
+        "toPort": "c"
+      },
+      {
+        "from": "n_entry",
+        "fromPort": "exec",
+        "to": "n_out_n",
+        "toPort": "exec"
+      },
+      {
+        "from": "n_n",
+        "fromPort": "out",
+        "to": "n_out_n",
+        "toPort": "in"
+      },
+      {
+        "from": "n_out_n",
+        "fromPort": "exec",
+        "to": "n_out_phi",
+        "toPort": "exec"
+      },
+      {
+        "from": "n_phi",
+        "fromPort": "out",
+        "to": "n_out_phi",
+        "toPort": "in"
+      },
+      {
+        "from": "n_out_phi",
+        "fromPort": "exec",
+        "to": "n_out_d",
+        "toPort": "exec"
+      },
+      {
+        "from": "n_d",
+        "fromPort": "out",
+        "to": "n_out_d",
+        "toPort": "in"
+      },
+      {
+        "from": "n_out_d",
+        "fromPort": "exec",
+        "to": "n_out_c",
+        "toPort": "exec"
+      },
+      {
+        "from": "n_c",
+        "fromPort": "out",
+        "to": "n_out_c",
+        "toPort": "in"
+      },
+      {
+        "from": "n_out_c",
+        "fromPort": "exec",
+        "to": "n_out_m",
+        "toPort": "exec"
+      },
+      {
+        "from": "n_m2",
+        "fromPort": "out",
+        "to": "n_out_m",
+        "toPort": "in"
+      }
+    ]
+  },
+  "functions": {},
+  "nodeSeq": 40,
+  "fnSeq": 1
+}

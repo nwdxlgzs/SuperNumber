@@ -1,0 +1,95 @@
+{
+  "version": 3,
+  "format": {
+    "e": 11,
+    "m": 52,
+    "nan": 1
+  },
+  "main": {
+    "nodes": [
+      {
+        "id": "n_cmt",
+        "type": "comment",
+        "op": null,
+        "x": 60,
+        "y": -40,
+        "cfg": {
+          "text": "数组求和示例：arr_lit → arr_reduce(sum) → out",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": ""
+      },
+      {
+        "id": "n1",
+        "type": "arr_lit",
+        "x": 60,
+        "y": 80,
+        "cfg": {
+          "value": "1, 2, 3, 4",
+          "portValues": {}
+        },
+        "inputs": {},
+        "inputFromPorts": {},
+        "note": "字面量数组"
+      },
+      {
+        "id": "n2",
+        "type": "arr_reduce",
+        "x": 320,
+        "y": 80,
+        "cfg": {
+          "op": "sum",
+          "portValues": {}
+        },
+        "inputs": {
+          "a": "n1"
+        },
+        "inputFromPorts": {
+          "a": "out"
+        },
+        "note": "数组归约（求和）"
+      },
+      {
+        "id": "n3",
+        "type": "out",
+        "x": 560,
+        "y": 80,
+        "cfg": {
+          "portValues": {}
+        },
+        "inputs": {
+          "in": "n2"
+        },
+        "inputFromPorts": {
+          "in": "out"
+        },
+        "note": "输出结果"
+      }
+    ],
+    "wires": [
+      {
+        "from": "n1",
+        "fromPort": "out",
+        "to": "n2",
+        "toPort": "a"
+      },
+      {
+        "from": "n2",
+        "fromPort": "out",
+        "to": "n3",
+        "toPort": "in"
+      }
+    ]
+  },
+  "functions": {},
+  "nodeSeq": 4,
+  "fnSeq": 1
+}

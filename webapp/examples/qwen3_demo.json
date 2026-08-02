@@ -1,0 +1,1887 @@
+{
+  "version": 3,
+  "format": {
+    "e": 11,
+    "m": 52,
+    "nan": 1
+  },
+  "main": {
+    "nodes": [
+      {
+        "id": "cmt",
+        "type": "comment",
+        "op": null,
+        "x": 1214.2549322489656,
+        "y": 167.1072742144621,
+        "cfg": {
+          "text": "Qwen3 风格迷你 Transformer（全部走 SN tensor / WASM）\n形状: seq=4, d_model=8, d_ff=16, layers=2\n函数: qwen3_attn · qwen3_ffn · qwen3_block（嵌套调用）\n单层: RMSNorm → Attn(RoPE+SDPA) → residual → RMSNorm → SwiGLU-FFN → residual\n主图: X → L1 → L2 → final_rms → OUT\n运行: Enter / 运行按钮。最终 OUT 与导出 C 一致。",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false
+      },
+      {
+        "id": "X",
+        "type": "mat_lit",
+        "op": null,
+        "x": 448.8139900462588,
+        "y": 156.89119544124404,
+        "cfg": {
+          "value": "-0.0884,-0.0667,0.0938,0.0571,-0.0360,-0.0479,0.0262,0.0087; -0.0204,0.0717,0.0450,0.0227,0.0880,-0.0535,-0.0354,-0.0673; 0.0700,-0.0795,0.0906,-0.0773,-0.0888,0.0081,0.0054,-0.0233; 0.0660,-0.0547,-0.0094,0.0467,0.0720,0.0489,-0.0274,0.0319",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "输入激活 X [4×8]"
+      },
+      {
+        "id": "Wq",
+        "type": "mat_lit",
+        "op": null,
+        "x": 446.29456604625886,
+        "y": 296.20675381233775,
+        "cfg": {
+          "value": "0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.5,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.5,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "Attention Q 权重 Wq [8×8]"
+      },
+      {
+        "id": "Wk",
+        "type": "mat_lit",
+        "op": null,
+        "x": 442.09547478844627,
+        "y": 436.3622226990566,
+        "cfg": {
+          "value": "0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.5,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.5,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "Attention K 权重 Wk [8×8]"
+      },
+      {
+        "id": "Wv",
+        "type": "mat_lit",
+        "op": null,
+        "x": 446.29456604625886,
+        "y": 575.6777810701503,
+        "cfg": {
+          "value": "0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.5,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.5,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "Attention V 权重 Wv [8×8]"
+      },
+      {
+        "id": "Wo",
+        "type": "mat_lit",
+        "op": null,
+        "x": 446.29456604625886,
+        "y": 719.1923538123378,
+        "cfg": {
+          "value": "1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0; 0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "Attention 输出投影 Wo [8×8]"
+      },
+      {
+        "id": "Wg",
+        "type": "mat_lit",
+        "op": null,
+        "x": 442.2212220462585,
+        "y": 880.7131986990573,
+        "cfg": {
+          "value": "0.0800,0.0505,0.0174,-0.0001,0.0652,-0.0299,0.0586,-0.0293,0.0168,0.0513,0.0662,0.0183,-0.0092,0.0893,0.0866,0.0195; -0.0528,-0.0103,-0.0642,0.0575,0.0236,0.0293,-0.0310,0.0283,-0.0264,-0.0223,0.0886,-0.0505,0.0964,-0.0963,-0.0558,-0.0557; 0.0480,-0.0423,-0.0930,0.0975,-0.0900,-0.0923,0.0074,-0.0341,-0.0120,0.0833,-0.0394,0.0119,-0.0620,-0.0803,0.0434,-0.0109; 0.0240,-0.0231,0.0414,-0.0161,-0.0724,0.0981,0.0442,-0.0101,-0.0520,-0.0639,-0.0602,-0.0937,-0.0684,0.0973,-0.0014,0.0611; -0.0544,-0.0407,-0.0354,0.0207,-0.0708,-0.0619,0.0298,0.0571,-0.0168,0.0497,0.0758,-0.0233,0.0260,-0.0675,0.0290,0.0803; -0.0512,0.0313,-0.0402,0.0879,-0.0516,0.0869,-0.0390,-0.0005,0.0424,0.0209,0.0358,0.0295,-0.0364,0.0765,0.0066,-0.0957; 0.0016,-0.0471,-0.0658,-0.0209,-0.0932,-0.0075,-0.0822,0.0731,0.0952,-0.0399,-0.0826,-0.0825,0.0692,0.0845,0.0930,-0.0285; -0.0832,0.0073,-0.0738,-0.0273,-0.0196,-0.0075,0.0058,-0.0821,-0.0664,-0.0895,0.0150,-0.0649,-0.0652,0.0813,0.0002,-0.0333",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "FFN gate 权重 Wg [8×16]"
+      },
+      {
+        "id": "Wu",
+        "type": "mat_lit",
+        "op": null,
+        "x": 448.93966041735223,
+        "y": 1033.465672255698,
+        "cfg": {
+          "value": "-0.0358,0.0091,0.0792,-0.0639,-0.0842,-0.0857,-0.0076,-0.0659,0.0354,-0.0413,0.0592,0.0985,-0.0754,0.0431,0.0652,0.0981; -0.0966,0.0891,0.0760,-0.0927,0.0150,-0.0953,-0.0316,0.0365,-0.0078,-0.0061,-0.0800,-0.0167,-0.0914,-0.0337,-0.0052,0.0005; 0.0570,0.0939,-0.0664,0.0833,-0.0586,0.0007,0.0068,0.0477,0.0802,-0.0493,-0.0448,0.0489,0.0830,0.0847,0.0284,0.0597; 0.0266,-0.0597,0.0184,-0.0015,-0.0298,0.0071,-0.0556,-0.0563,0.0594,-0.0893,0.0512,-0.0855,0.0110,-0.0593,-0.0580,0.0053; 0.0634,0.0939,0.0840,0.0497,0.0678,0.0647,-0.0332,-0.0115,-0.0894,0.0371,0.0112,0.0121,-0.0114,0.0399,0.0140,-0.0539; 0.0810,0.0587,0.0488,0.0561,-0.0602,0.0103,0.0340,-0.0003,0.0130,0.0531,-0.0896,-0.0647,0.0814,0.0111,-0.0788,0.0485; 0.0922,0.0907,0.0328,-0.0271,-0.0970,0.0551,-0.0716,-0.0323,-0.0894,-0.0685,-0.0800,0.0937,-0.0978,-0.0209,-0.0948,0.0613; -0.0598,-0.0069,-0.0760,-0.0431,-0.0890,-0.0905,-0.0492,0.0045,-0.0158,-0.0157,-0.0432,0.0377,0.0718,0.0063,0.0556,-0.0651",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "FFN up 权重 Wu [8×16]"
+      },
+      {
+        "id": "Wd",
+        "type": "mat_lit",
+        "op": null,
+        "x": 449.77953248961774,
+        "y": 1184.5385938846043,
+        "cfg": {
+          "value": "-0.0674,-0.0737,0.0028,0.0789,-0.0182,-0.0677,0.0248,0.0961; -0.0922,-0.0265,0.0804,0.0589,-0.0078,-0.0493,-0.0128,0.0201; -0.0194,-0.0417,-0.0788,0.0421,-0.0726,-0.0741,-0.0328,0.0529; 0.0998,0.0615,-0.0172,0.0861,0.0978,0.0211,-0.0336,-0.0519; -0.0546,-0.0337,-0.0132,0.0549,0.0746,-0.0133,0.0056,0.0465; 0.0998,-0.0793,-0.0556,-0.0419,-0.0622,-0.0205,-0.0720,-0.0343; 0.0670,0.0671,-0.0276,0.0629,0.0554,0.0251,-0.0200,0.0161; 0.0470,0.0599,0.0740,0.0013,0.0994,-0.0077,0.0288,0.0585; -0.0658,-0.0017,-0.0772,-0.0923,-0.0902,-0.0821,0.0408,-0.0191; -0.0698,0.0119,0.0468,-0.0819,0.0786,0.0899,0.0192,0.0425; 0.0158,-0.0865,0.0620,-0.0427,-0.0422,0.0923,0.0504,0.0001; 0.0838,0.0823,0.0948,-0.0531,-0.0830,0.0803,-0.0848,-0.0279; 0.0382,-0.0337,-0.0052,-0.0747,0.0954,-0.0197,-0.0152,-0.0431; -0.0586,0.0039,0.0900,0.0109,-0.0318,-0.0317,0.0000,-0.0887; -0.0130,0.0351,0.0492,0.0549,-0.0278,-0.0213,-0.0888,-0.0223; -0.0442,0.0615,0.0756,0.0781,-0.0542,0.0211,-0.0688,-0.0935",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "FFN down 权重 Wd [16×8]"
+      },
+      {
+        "id": "gn1",
+        "type": "mat_lit",
+        "op": null,
+        "x": 570.7118460462586,
+        "y": 1469.1409106267922,
+        "cfg": {
+          "value": "1,1,1,1,1,1,1,1",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "RMSNorm1 gamma [1×8]"
+      },
+      {
+        "id": "gn2",
+        "type": "mat_lit",
+        "op": null,
+        "x": 562.3137404173524,
+        "y": 1329.6402770701511,
+        "cfg": {
+          "value": "1,1,1,1,1,1,1,1",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "RMSNorm2 gamma [1×8]"
+      },
+      {
+        "id": "L1",
+        "type": "fn_call",
+        "op": null,
+        "x": 896.0614780462588,
+        "y": 607.8681298846042,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": 10,
+        "fnId": "f1",
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "p0": "X",
+          "p1": "Wq",
+          "p2": "Wk",
+          "p3": "Wv",
+          "p4": "Wo",
+          "p5": "Wg",
+          "p6": "Wu",
+          "p7": "Wd",
+          "p8": "gn1",
+          "p9": "gn2",
+          "exec": "n100"
+        },
+        "inputFromPorts": {
+          "p0": "out",
+          "p1": "out",
+          "p2": "out",
+          "p3": "out",
+          "p4": "out",
+          "p5": "out",
+          "p6": "out",
+          "p7": "out",
+          "p8": "out",
+          "p9": "out",
+          "exec": "exec"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "第 1 层 qwen3_block"
+      },
+      {
+        "id": "L2",
+        "type": "fn_call",
+        "op": null,
+        "x": 1384.829657159541,
+        "y": 614.7122386267913,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": 10,
+        "fnId": "f1",
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "p0": "L1",
+          "p1": "Wq",
+          "p2": "Wk",
+          "p3": "Wv",
+          "p4": "Wo",
+          "p5": "Wg",
+          "p6": "Wu",
+          "p7": "Wd",
+          "p8": "gn1",
+          "p9": "gn2",
+          "exec": "L1"
+        },
+        "inputFromPorts": {
+          "p0": "out",
+          "p1": "out",
+          "p2": "out",
+          "p3": "out",
+          "p4": "out",
+          "p5": "out",
+          "p6": "out",
+          "p7": "out",
+          "p8": "out",
+          "p9": "out",
+          "exec": "exec"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "第 2 层 qwen3_block（权重共享玩具）"
+      },
+      {
+        "id": "final_rms",
+        "type": "rms_norm",
+        "op": null,
+        "x": 1822.0293245618848,
+        "y": 835.5189586990574,
+        "cfg": {
+          "eps": "1e-6",
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "a": "L2",
+          "gamma": "gn1"
+        },
+        "inputFromPorts": {
+          "a": "out",
+          "gamma": "out"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "最终 RMSNorm（输出前）"
+      },
+      {
+        "id": "OUT",
+        "type": "out",
+        "op": null,
+        "x": 2036.1506429329786,
+        "y": 780.9313874412449,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {
+          "in": "final_rms",
+          "exec": "L2"
+        },
+        "inputFromPorts": {
+          "in": "out",
+          "exec": "exec"
+        },
+        "collapsed": false,
+        "foldUnusedPorts": false,
+        "note": "最终隐状态 [4×8]"
+      },
+      {
+        "id": "n100",
+        "type": "entry",
+        "op": "entry",
+        "x": 761.4090752578131,
+        "y": 399.7285248144533,
+        "cfg": {
+          "portValues": {}
+        },
+        "arity": null,
+        "fnId": null,
+        "paramIndex": null,
+        "paramName": null,
+        "inputs": {},
+        "inputFromPorts": {},
+        "collapsed": false,
+        "foldUnusedPorts": false
+      }
+    ],
+    "wires": [
+      {
+        "from": "X",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p0"
+      },
+      {
+        "from": "Wq",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p1"
+      },
+      {
+        "from": "Wk",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p2"
+      },
+      {
+        "from": "Wv",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p3"
+      },
+      {
+        "from": "Wo",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p4"
+      },
+      {
+        "from": "Wg",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p5"
+      },
+      {
+        "from": "Wu",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p6"
+      },
+      {
+        "from": "Wd",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p7"
+      },
+      {
+        "from": "gn1",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p8"
+      },
+      {
+        "from": "gn2",
+        "fromPort": "out",
+        "to": "L1",
+        "toPort": "p9"
+      },
+      {
+        "from": "L1",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p0"
+      },
+      {
+        "from": "Wq",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p1"
+      },
+      {
+        "from": "Wk",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p2"
+      },
+      {
+        "from": "Wv",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p3"
+      },
+      {
+        "from": "Wo",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p4"
+      },
+      {
+        "from": "Wg",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p5"
+      },
+      {
+        "from": "Wu",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p6"
+      },
+      {
+        "from": "Wd",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p7"
+      },
+      {
+        "from": "gn1",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p8"
+      },
+      {
+        "from": "gn2",
+        "fromPort": "out",
+        "to": "L2",
+        "toPort": "p9"
+      },
+      {
+        "from": "L2",
+        "fromPort": "out",
+        "to": "final_rms",
+        "toPort": "a"
+      },
+      {
+        "from": "gn1",
+        "fromPort": "out",
+        "to": "final_rms",
+        "toPort": "gamma"
+      },
+      {
+        "from": "final_rms",
+        "fromPort": "out",
+        "to": "OUT",
+        "toPort": "in"
+      },
+      {
+        "from": "L1",
+        "fromPort": "exec",
+        "to": "L2",
+        "toPort": "exec"
+      },
+      {
+        "from": "L2",
+        "fromPort": "exec",
+        "to": "OUT",
+        "toPort": "exec"
+      },
+      {
+        "from": "n100",
+        "fromPort": "exec",
+        "to": "L1",
+        "toPort": "exec"
+      }
+    ]
+  },
+  "functions": {
+    "f_attn": {
+      "id": "f_attn",
+      "name": "qwen3_attn",
+      "params": [
+        "x",
+        "Wq",
+        "Wk",
+        "Wv",
+        "Wo"
+      ],
+      "nodes": [
+        {
+          "id": "cmt_fn",
+          "type": "comment",
+          "op": null,
+          "x": 1513.5957038265658,
+          "y": 298.86489129059566,
+          "cfg": {
+            "text": "qwen3_attn：X@Wq/Wk/Wv → RoPE → SDPA → @Wo",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false
+        },
+        {
+          "id": "e0",
+          "type": "entry",
+          "op": null,
+          "x": 1763.6614821373,
+          "y": 485.2898871283627,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "函数入口（纯数据流可留空 exec）"
+        },
+        {
+          "id": "p0",
+          "type": "fn_param",
+          "op": null,
+          "x": 793.8965616103419,
+          "y": 319.5890942347636,
+          "cfg": {
+            "name": "x",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 0,
+          "paramName": "x",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "x 输入"
+        },
+        {
+          "id": "p1",
+          "type": "fn_param",
+          "op": null,
+          "x": 794.7363952392482,
+          "y": 486.0019837914042,
+          "cfg": {
+            "name": "Wq",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 1,
+          "paramName": "Wq",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wq"
+        },
+        {
+          "id": "p2",
+          "type": "fn_param",
+          "op": null,
+          "x": 798.0955759814357,
+          "y": 623.8615679359356,
+          "cfg": {
+            "name": "Wk",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 2,
+          "paramName": "Wk",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wk"
+        },
+        {
+          "id": "p3",
+          "type": "fn_param",
+          "op": null,
+          "x": 793.0568048681545,
+          "y": 767.5995646058575,
+          "cfg": {
+            "name": "Wv",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 3,
+          "paramName": "Wv",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wv"
+        },
+        {
+          "id": "p4",
+          "type": "fn_param",
+          "op": null,
+          "x": 793.0567664247951,
+          "y": 907.9784189769513,
+          "cfg": {
+            "name": "Wo",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 4,
+          "paramName": "Wo",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wo"
+        },
+        {
+          "id": "n_q",
+          "type": "mat_mul",
+          "op": null,
+          "x": 1030.8921633462423,
+          "y": 380.321274199419,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "p1"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Q = x @ Wq"
+        },
+        {
+          "id": "n_k",
+          "type": "mat_mul",
+          "op": null,
+          "x": 1030.8921633462421,
+          "y": 542.4670405705128,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "p2"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "K = x @ Wk"
+        },
+        {
+          "id": "n_v",
+          "type": "mat_mul",
+          "op": null,
+          "x": 1028.3727393462423,
+          "y": 697.0545349416066,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "p3"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "V = x @ Wv"
+        },
+        {
+          "id": "n_rq",
+          "type": "rope",
+          "op": null,
+          "x": 1238.4975074548129,
+          "y": 381.4636062675716,
+          "cfg": {
+            "base": "10000",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_q"
+          },
+          "inputFromPorts": {
+            "a": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "RoPE(Q)"
+        },
+        {
+          "id": "n_rk",
+          "type": "rope",
+          "op": null,
+          "x": 1236.8544172890536,
+          "y": 540.9125286918002,
+          "cfg": {
+            "base": "10000",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_k"
+          },
+          "inputFromPorts": {
+            "a": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "RoPE(K)"
+        },
+        {
+          "id": "n_sdpa",
+          "type": "attention_sdp",
+          "op": null,
+          "x": 1464.0777413212454,
+          "y": 601.5852441801702,
+          "cfg": {
+            "scale": "",
+            "causal": true,
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "q": "n_rq",
+            "k": "n_rk",
+            "v": "n_v",
+            "mask": null
+          },
+          "inputFromPorts": {
+            "q": "out",
+            "k": "out",
+            "v": "out",
+            "mask": null
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Scaled Dot-Product Attention"
+        },
+        {
+          "id": "n_o",
+          "type": "mat_mul",
+          "op": null,
+          "x": 1765.726954044943,
+          "y": 725.7255371888762,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_sdpa",
+            "b": "p4"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "out = sdpa @ Wo"
+        },
+        {
+          "id": "n_ret",
+          "type": "fn_return",
+          "op": null,
+          "x": 1962.6287925453983,
+          "y": 615.658450250017,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "in": "n_o",
+            "exec": "e0"
+          },
+          "inputFromPorts": {
+            "in": "out",
+            "exec": "exec"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "返回 attn 输出"
+        }
+      ],
+      "wires": [
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_q",
+          "toPort": "a"
+        },
+        {
+          "from": "p1",
+          "fromPort": "out",
+          "to": "n_q",
+          "toPort": "b"
+        },
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_k",
+          "toPort": "a"
+        },
+        {
+          "from": "p2",
+          "fromPort": "out",
+          "to": "n_k",
+          "toPort": "b"
+        },
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_v",
+          "toPort": "a"
+        },
+        {
+          "from": "p3",
+          "fromPort": "out",
+          "to": "n_v",
+          "toPort": "b"
+        },
+        {
+          "from": "n_q",
+          "fromPort": "out",
+          "to": "n_rq",
+          "toPort": "a"
+        },
+        {
+          "from": "n_k",
+          "fromPort": "out",
+          "to": "n_rk",
+          "toPort": "a"
+        },
+        {
+          "from": "n_rq",
+          "fromPort": "out",
+          "to": "n_sdpa",
+          "toPort": "q"
+        },
+        {
+          "from": "n_rk",
+          "fromPort": "out",
+          "to": "n_sdpa",
+          "toPort": "k"
+        },
+        {
+          "from": "n_v",
+          "fromPort": "out",
+          "to": "n_sdpa",
+          "toPort": "v"
+        },
+        {
+          "from": "n_sdpa",
+          "fromPort": "out",
+          "to": "n_o",
+          "toPort": "a"
+        },
+        {
+          "from": "p4",
+          "fromPort": "out",
+          "to": "n_o",
+          "toPort": "b"
+        },
+        {
+          "from": "n_o",
+          "fromPort": "out",
+          "to": "n_ret",
+          "toPort": "in"
+        },
+        {
+          "from": "e0",
+          "fromPort": "exec",
+          "to": "n_ret",
+          "toPort": "exec"
+        }
+      ]
+    },
+    "f_ffn": {
+      "id": "f_ffn",
+      "name": "qwen3_ffn",
+      "params": [
+        "x",
+        "Wg",
+        "Wu",
+        "Wd"
+      ],
+      "nodes": [
+        {
+          "id": "cmt_fn",
+          "type": "comment",
+          "op": null,
+          "x": 529.644189381469,
+          "y": -7.357054041235401,
+          "cfg": {
+            "text": "qwen3_ffn：SwiGLU(x@Wg, x@Wu) @ Wd",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false
+        },
+        {
+          "id": "e0",
+          "type": "entry",
+          "op": null,
+          "x": 668.6994286752874,
+          "y": 138.94674812747178,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "函数入口"
+        },
+        {
+          "id": "p0",
+          "type": "fn_param",
+          "op": null,
+          "x": 40,
+          "y": 60,
+          "cfg": {
+            "name": "x",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 0,
+          "paramName": "x",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "x"
+        },
+        {
+          "id": "p1",
+          "type": "fn_param",
+          "op": null,
+          "x": 40,
+          "y": 232.291571185547,
+          "cfg": {
+            "name": "Wg",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 1,
+          "paramName": "Wg",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wg"
+        },
+        {
+          "id": "p2",
+          "type": "fn_param",
+          "op": null,
+          "x": 38.32040962890623,
+          "y": 392.8258560000003,
+          "cfg": {
+            "name": "Wu",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 2,
+          "paramName": "Wu",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wu"
+        },
+        {
+          "id": "p3",
+          "type": "fn_param",
+          "op": null,
+          "x": 36.53772787990238,
+          "y": 566.4544532083429,
+          "cfg": {
+            "name": "Wd",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 3,
+          "paramName": "Wd",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wd"
+        },
+        {
+          "id": "n_g",
+          "type": "mat_mul",
+          "op": null,
+          "x": 265.4312862061771,
+          "y": 124.41484690027816,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "p1"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "gate = x @ Wg"
+        },
+        {
+          "id": "n_u",
+          "type": "mat_mul",
+          "op": null,
+          "x": 262.0721054639896,
+          "y": 311.75489171473134,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "p2"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "up = x @ Wu"
+        },
+        {
+          "id": "n_sw",
+          "type": "swiglu",
+          "op": null,
+          "x": 472.46917383426603,
+          "y": 217.0724074294626,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "gate": "n_g",
+            "up": "n_u"
+          },
+          "inputFromPorts": {
+            "gate": "out",
+            "up": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "SwiGLU(gate, up)"
+        },
+        {
+          "id": "n_ff",
+          "type": "mat_mul",
+          "op": null,
+          "x": 675.5739741691975,
+          "y": 286.6200847638553,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_sw",
+            "b": "p3"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "down = swiglu @ Wd"
+        },
+        {
+          "id": "n_ret",
+          "type": "fn_return",
+          "op": null,
+          "x": 887.4003221523678,
+          "y": 237.16009356652688,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "in": "n_ff",
+            "exec": "e0"
+          },
+          "inputFromPorts": {
+            "in": "out",
+            "exec": "exec"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "返回 FFN 输出"
+        }
+      ],
+      "wires": [
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_g",
+          "toPort": "a"
+        },
+        {
+          "from": "p1",
+          "fromPort": "out",
+          "to": "n_g",
+          "toPort": "b"
+        },
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_u",
+          "toPort": "a"
+        },
+        {
+          "from": "p2",
+          "fromPort": "out",
+          "to": "n_u",
+          "toPort": "b"
+        },
+        {
+          "from": "n_g",
+          "fromPort": "out",
+          "to": "n_sw",
+          "toPort": "gate"
+        },
+        {
+          "from": "n_u",
+          "fromPort": "out",
+          "to": "n_sw",
+          "toPort": "up"
+        },
+        {
+          "from": "n_sw",
+          "fromPort": "out",
+          "to": "n_ff",
+          "toPort": "a"
+        },
+        {
+          "from": "p3",
+          "fromPort": "out",
+          "to": "n_ff",
+          "toPort": "b"
+        },
+        {
+          "from": "n_ff",
+          "fromPort": "out",
+          "to": "n_ret",
+          "toPort": "in"
+        },
+        {
+          "from": "e0",
+          "fromPort": "exec",
+          "to": "n_ret",
+          "toPort": "exec"
+        }
+      ]
+    },
+    "f1": {
+      "id": "f1",
+      "name": "qwen3_block",
+      "params": [
+        "x",
+        "Wq",
+        "Wk",
+        "Wv",
+        "Wo",
+        "Wg",
+        "Wu",
+        "Wd",
+        "gn1",
+        "gn2"
+      ],
+      "nodes": [
+        {
+          "id": "cmt_fn",
+          "type": "comment",
+          "op": null,
+          "x": 629.127216069215,
+          "y": 246.01443107601625,
+          "cfg": {
+            "text": "qwen3_block：完整 Transformer block",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false
+        },
+        {
+          "id": "e0",
+          "type": "entry",
+          "op": null,
+          "x": 274.1085275609606,
+          "y": 379.9940407045915,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "函数入口"
+        },
+        {
+          "id": "p0",
+          "type": "fn_param",
+          "op": null,
+          "x": 17.788837476617374,
+          "y": 151.31257586920879,
+          "cfg": {
+            "name": "x",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 0,
+          "paramName": "x",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "x"
+        },
+        {
+          "id": "p1",
+          "type": "fn_param",
+          "op": null,
+          "x": 17.789682658176886,
+          "y": 307.33475742488923,
+          "cfg": {
+            "name": "Wq",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 1,
+          "paramName": "Wq",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wq"
+        },
+        {
+          "id": "p2",
+          "type": "fn_param",
+          "op": null,
+          "x": 14.680735752039382,
+          "y": 436.8952952266241,
+          "cfg": {
+            "name": "Wk",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 2,
+          "paramName": "Wk",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wk"
+        },
+        {
+          "id": "p3",
+          "type": "fn_param",
+          "op": null,
+          "x": 20.902286047154917,
+          "y": 566.486019034077,
+          "cfg": {
+            "name": "Wv",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 3,
+          "paramName": "Wv",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wv"
+        },
+        {
+          "id": "p4",
+          "type": "fn_param",
+          "op": null,
+          "x": 23.242052064827263,
+          "y": 699.9329850896055,
+          "cfg": {
+            "name": "Wo",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 4,
+          "paramName": "Wo",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wo"
+        },
+        {
+          "id": "p5",
+          "type": "fn_param",
+          "op": null,
+          "x": 20.89468835127984,
+          "y": 830.2781837954567,
+          "cfg": {
+            "name": "Wg",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 5,
+          "paramName": "Wg",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wg"
+        },
+        {
+          "id": "p6",
+          "type": "fn_param",
+          "op": null,
+          "x": 24.01278093359892,
+          "y": 990.9953062461576,
+          "cfg": {
+            "name": "Wu",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 6,
+          "paramName": "Wu",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wu"
+        },
+        {
+          "id": "p7",
+          "type": "fn_param",
+          "op": null,
+          "x": 24.045798885385253,
+          "y": 1151.9756299503154,
+          "cfg": {
+            "name": "Wd",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 7,
+          "paramName": "Wd",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "Wd"
+        },
+        {
+          "id": "p8",
+          "type": "fn_param",
+          "op": null,
+          "x": 24.112974776788334,
+          "y": 1298.689555080993,
+          "cfg": {
+            "name": "gn1",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 8,
+          "paramName": "gn1",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "gn1"
+        },
+        {
+          "id": "p9",
+          "type": "fn_param",
+          "op": null,
+          "x": 31.840548691596496,
+          "y": 1448.1570159101823,
+          "cfg": {
+            "name": "gn2",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": 9,
+          "paramName": "gn2",
+          "inputs": {},
+          "inputFromPorts": {},
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "gn2"
+        },
+        {
+          "id": "n_rms1",
+          "type": "rms_norm",
+          "op": null,
+          "x": 264.76280467991876,
+          "y": 571.9799218795223,
+          "cfg": {
+            "eps": "1e-6",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "gamma": "p8"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "gamma": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "pre-attn RMSNorm"
+        },
+        {
+          "id": "n_attn",
+          "type": "fn_call",
+          "op": null,
+          "x": 481.9724611377799,
+          "y": 621.1421871349294,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": 5,
+          "fnId": "f_attn",
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "p0": "n_rms1",
+            "p1": "p1",
+            "p2": "p2",
+            "p3": "p3",
+            "p4": "p4",
+            "exec": "e0"
+          },
+          "inputFromPorts": {
+            "p0": "out",
+            "p1": "out",
+            "p2": "out",
+            "p3": "out",
+            "p4": "out",
+            "exec": "exec"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "调用 qwen3_attn"
+        },
+        {
+          "id": "n_r1",
+          "type": "residual_add",
+          "op": null,
+          "x": 797.8809781407814,
+          "y": 500.1862925777506,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "p0",
+            "b": "n_attn"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "residual：x + attn"
+        },
+        {
+          "id": "n_rms2",
+          "type": "rms_norm",
+          "op": null,
+          "x": 985.6873345582385,
+          "y": 718.2432943689864,
+          "cfg": {
+            "eps": "1e-6",
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_r1",
+            "gamma": "p9"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "gamma": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "pre-ffn RMSNorm"
+        },
+        {
+          "id": "n_ffn",
+          "type": "fn_call",
+          "op": null,
+          "x": 1179.0127596449552,
+          "y": 921.7962821219782,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": 4,
+          "fnId": "f_ffn",
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "p0": "n_rms2",
+            "p1": "p5",
+            "p2": "p6",
+            "p3": "p7",
+            "exec": "n_attn"
+          },
+          "inputFromPorts": {
+            "p0": "out",
+            "p1": "out",
+            "p2": "out",
+            "p3": "out",
+            "exec": "exec"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "调用 qwen3_ffn"
+        },
+        {
+          "id": "n_r2",
+          "type": "residual_add",
+          "op": null,
+          "x": 1559.7975267240095,
+          "y": 942.1341836192361,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "a": "n_r1",
+            "b": "n_ffn"
+          },
+          "inputFromPorts": {
+            "a": "out",
+            "b": "out"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "residual：h + ffn"
+        },
+        {
+          "id": "n_ret",
+          "type": "fn_return",
+          "op": null,
+          "x": 1779.1971474841032,
+          "y": 755.8706577296748,
+          "cfg": {
+            "portValues": {}
+          },
+          "arity": null,
+          "fnId": null,
+          "paramIndex": null,
+          "paramName": null,
+          "inputs": {
+            "in": "n_r2",
+            "exec": "n_ffn"
+          },
+          "inputFromPorts": {
+            "in": "out",
+            "exec": "exec"
+          },
+          "collapsed": false,
+          "foldUnusedPorts": false,
+          "note": "返回 block 输出"
+        }
+      ],
+      "wires": [
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_rms1",
+          "toPort": "a"
+        },
+        {
+          "from": "p8",
+          "fromPort": "out",
+          "to": "n_rms1",
+          "toPort": "gamma"
+        },
+        {
+          "from": "n_rms1",
+          "fromPort": "out",
+          "to": "n_attn",
+          "toPort": "p0"
+        },
+        {
+          "from": "p1",
+          "fromPort": "out",
+          "to": "n_attn",
+          "toPort": "p1"
+        },
+        {
+          "from": "p2",
+          "fromPort": "out",
+          "to": "n_attn",
+          "toPort": "p2"
+        },
+        {
+          "from": "p3",
+          "fromPort": "out",
+          "to": "n_attn",
+          "toPort": "p3"
+        },
+        {
+          "from": "p4",
+          "fromPort": "out",
+          "to": "n_attn",
+          "toPort": "p4"
+        },
+        {
+          "from": "p0",
+          "fromPort": "out",
+          "to": "n_r1",
+          "toPort": "a"
+        },
+        {
+          "from": "n_attn",
+          "fromPort": "out",
+          "to": "n_r1",
+          "toPort": "b"
+        },
+        {
+          "from": "n_r1",
+          "fromPort": "out",
+          "to": "n_rms2",
+          "toPort": "a"
+        },
+        {
+          "from": "p9",
+          "fromPort": "out",
+          "to": "n_rms2",
+          "toPort": "gamma"
+        },
+        {
+          "from": "n_rms2",
+          "fromPort": "out",
+          "to": "n_ffn",
+          "toPort": "p0"
+        },
+        {
+          "from": "p5",
+          "fromPort": "out",
+          "to": "n_ffn",
+          "toPort": "p1"
+        },
+        {
+          "from": "p6",
+          "fromPort": "out",
+          "to": "n_ffn",
+          "toPort": "p2"
+        },
+        {
+          "from": "p7",
+          "fromPort": "out",
+          "to": "n_ffn",
+          "toPort": "p3"
+        },
+        {
+          "from": "n_r1",
+          "fromPort": "out",
+          "to": "n_r2",
+          "toPort": "a"
+        },
+        {
+          "from": "n_ffn",
+          "fromPort": "out",
+          "to": "n_r2",
+          "toPort": "b"
+        },
+        {
+          "from": "n_r2",
+          "fromPort": "out",
+          "to": "n_ret",
+          "toPort": "in"
+        },
+        {
+          "from": "e0",
+          "fromPort": "exec",
+          "to": "n_attn",
+          "toPort": "exec"
+        },
+        {
+          "from": "n_attn",
+          "fromPort": "exec",
+          "to": "n_ffn",
+          "toPort": "exec"
+        },
+        {
+          "from": "n_ffn",
+          "fromPort": "exec",
+          "to": "n_ret",
+          "toPort": "exec"
+        }
+      ]
+    }
+  },
+  "nodeSeq": 101,
+  "fnSeq": 3
+}

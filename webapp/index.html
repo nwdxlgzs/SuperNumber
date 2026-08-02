@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>SuperNumber Lab</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">SN</span>
+        <div>
+          <div class="title">SuperNumber Lab</div>
+          <div class="subtitle" id="verLabel">加载中…</div>
+        </div>
+      </div>
+      <div class="toolbar-group">
+        <label class="field-inline">E <input id="eBits" type="number" min="2" value="11" title="指数位宽，无上限（内存约束）" /></label>
+        <label class="field-inline">M <input id="mBits" type="number" min="1" value="52" title="尾数位宽，无上限（内存约束）" /></label>
+        <label class="field-inline check"><input id="nanEn" type="checkbox" checked /> NaN</label>
+        <button type="button" id="btnApplyFmt" class="btn">应用会话格式</button>
+      </div>
+      <div class="toolbar-group">
+        <button type="button" id="btnRun" class="btn primary">运行 (Enter)</button>
+        <button type="button" id="btnUndo" class="btn tool" title="撤销 (Ctrl+Z)" disabled><span class="tool-ico" aria-hidden="true">↶</span><span>撤销</span></button>
+        <button type="button" id="btnRedo" class="btn tool" title="重做 (Ctrl+Y)" disabled><span class="tool-ico" aria-hidden="true">↷</span><span>重做</span></button>
+        <button type="button" id="btnExportProj" class="btn">导出工程</button>
+        <button type="button" id="btnImportProj" class="btn">导入工程</button>
+        <input type="file" id="fileImport" accept="application/json,.json" hidden />
+        <button type="button" id="btnExportC" class="btn">导出 C</button>
+        <button type="button" id="btnTheme" class="btn ghost theme-toggle" title="切换主题" aria-label="切换主题" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-label">深色</span>
+        </button>
+        <button type="button" id="btnHelp" class="btn ghost">帮助 (?)</button>
+      </div>
+    </header>
+
+    
+    <div class="mobile-bar" id="mobileBar" aria-label="移动端面板">
+      <button type="button" class="btn" id="btnTogglePalette">节点</button>
+      <button type="button" class="btn" id="btnToggleInspect">检查器</button>
+      <button type="button" class="btn primary" id="btnRunMobile">运行</button>
+      <button type="button" class="btn ghost" id="btnPanHint" title="中键拖拽 / 空格或Alt+左键 / 双指平移 · Ctrl+滚轮缩放">平移</button>
+    </div>
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+
+    <div class="main">
+      <aside class="palette" id="palette">
+        <div class="palette-head">
+          <input id="paletteSearch" type="search" placeholder="搜索节点…" />
+          <div class="tabs" id="paletteTabs">
+            <button type="button" data-tab="all" class="tab active">全部</button>
+            <button type="button" data-tab="const" class="tab">常量</button>
+            <button type="button" data-tab="arith" class="tab">算术</button>
+            <button type="button" data-tab="math" class="tab">数学</button>
+            <button type="button" data-tab="bit" class="tab">位运算</button>
+            <button type="button" data-tab="spec" class="tab">特殊</button>
+            <button type="button" data-tab="cplx" class="tab">复数</button>
+            <button type="button" data-tab="flow" class="tab">控制流</button>
+            <button type="button" data-tab="data" class="tab">数组</button>
+            <button type="button" data-tab="fn" class="tab">函数</button>
+          </div>
+        </div>
+        <div class="palette-body" id="paletteBody"></div>
+      </aside>
+
+      <section class="workspace-wrap">
+        <div class="workspace-tools">
+          <span id="workspaceMode">主画布</span>
+          <button type="button" id="btnBackMain" class="btn ghost hidden">返回主画布</button>
+          <button type="button" id="btnNewFn" class="btn ghost">新建函数</button>
+          <button type="button" id="btnClear" class="btn danger ghost">清空</button>
+          </div>
+        <div class="workspace" id="workspace" title="中键拖拽平移 · 空格/Alt+左键平移 · Ctrl+滚轮缩放 · 双指缩放/平移 · Ctrl+0 重置">
+          <div class="world" id="world">
+            <svg id="wires" class="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="canvas" class="canvas"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="inspector" id="inspector">
+        <section class="panel">
+          <h3>节点属性</h3>
+          <div id="inspectEmpty" class="muted">选中节点后可编辑配置</div>
+          <div id="inspectBody" class="hidden"></div>
+        </section>
+        <section class="panel">
+          <h3>运行日志</h3>
+          <pre id="log" class="log"></pre>
+        </section>
+        <section class="panel grow">
+          <h3 class="cprev-head">导出 C 预览</h3>
+          <pre id="cprev" class="log code hl" spellcheck="false"></pre>
+        </section>
+      </aside>
+    </div>
+
+    <footer id="status" class="status">初始化…</footer>
+  </div>
+
+  <dialog id="cfgDlg" class="dlg">
+    <form method="dialog" id="cfgForm" class="dlg-body">
+      <h2 id="cfgTitle">配置常量</h2>
+      <div id="cfgFields"></div>
+      <menu>
+        <button type="submit" value="cancel" class="btn ghost">取消</button>
+        <button type="submit" value="ok" class="btn primary" id="cfgOk">确定</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="fnDlg" class="dlg">
+    <form method="dialog" id="fnForm" class="dlg-body">
+      <h2>新建自定义函数</h2>
+      <label>名称 <input id="fnName" type="text" value="my_fn" pattern="[A-Za-z_][A-Za-z0-9_]*" required /></label>
+      <label>参数个数 <input id="fnArity" type="number" min="0" max="64" value="2" /></label>
+      <label>参数名（逗号分隔，可空） <input id="fnParams" type="text" placeholder="x,y" /></label>
+      <p class="hint">创建后将进入函数编辑画布：用「参数」节点作为输入，「返回」节点作为输出。</p>
+      <menu>
+        <button type="submit" value="cancel" class="btn ghost">取消</button>
+        <button type="submit" value="ok" class="btn primary">创建并编辑</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="helpDlg" class="dlg">
+    <form method="dialog" class="dlg-body">
+      <h2>SuperNumber Lab 使用说明</h2>
+      <ul>
+        <li><b>常量</b>：添加时弹出配置（定宽整数位宽/符号、大整数、浮点 E/M/NaN、复数）。双击节点可再编辑。定宽/浮点有 i32、FP64 等预设；E/M 可任意大。</li>
+        <li><b>连线</b>：从<strong>任意端口</strong>拖到另一端（输出↔输入均可）。<b>数据口</b>与<strong>执行口（exec）</strong>不可互连，也不会错误高亮。类型不匹配会自动插入 Cast。松手在高亮圆点上即可连线。Esc 取消。</li>
+        <li><b>边缘自动平移</b>：连线或拖动（含框选批量移动）靠近工作区边缘时，画布自动向该方向平移，便于把节点移到视野外区域（类似 UE 蓝图）。</li>
+        <li><b>移动节点</b>：按住标题栏拖动；松手即停。支持 <b>框选</b> 后批量移动。Shift/Ctrl 点选多选。</li>
+        <li><b>撤销 / 重做</b>：工具栏按钮，或 <b>Ctrl+Z</b> / <b>Ctrl+Y</b>（Mac 可用 Cmd）。</li>
+        <li><b>画布平移 / 缩放</b>：<b>中键</b>拖拽平移；或按住 <b>空格</b>（或 Alt）+ 左键；滚轮平移视图；<b>Ctrl+滚轮</b> 缩放；触控板/手机 <b>双指</b> 平移与捏合缩放。</li>
+        <li><b>注释</b>：独立「注释」节点；也可在节点旁附加注释（右键 / 配置，类似 UE 节点备注）。</li>
+        <li><b>自定义函数</b>：「函数」页签 → 新建 / <b>编辑 / 重命名 / 删除</b> → 在函数画布内用参数/返回节点搭子图 → 主画布「放入画布」或<strong>拖入</strong>调用。调用节点带 <code>exec</code> 进/出，可串入控制流。参数最多 64，可缺省（未用到的可不连）。</li>
+        <li><b>运行</b>：工具栏「运行」或 Enter。所有运算走 SN/WASM，保证与原生一致。节点结果预览最多两行（首尾摘要 + 省略号），悬停看全文。</li>
+        <li><b>工程</b>：JSON 导入/导出（非空工程导入会询问）；「导出 C」生成标准 <code>sn_api</code> 调用；右侧可预览导出的 C 代码（语法高亮）。</li>
+        <li><b>右键菜单</b>：在画布空白 / 节点 / 连线上右键，可运行、复制粘贴、断开连线、折叠端口、导出等。</li>
+        <li><b>本地</b>：modular 需 HTTP；单页 <code>snlab-single.html</code> 可 file://。</li>
+      </ul>
+
+      <h3>控制流（UE 蓝图风格）</h3>
+      <ul>
+        <li><b>Entry</b>：执行起点；有 Entry 时按 exec 白线解释执行，否则按纯数据拓扑求值。</li>
+        <li><b>Branch / If</b>：cond 真走 then，假走 else。</li>
+        <li><b>While / For / DoWhile</b>：循环体走 body，结束后走 completed；While 可设 max_iter。</li>
+        <li><b>Set / Get</b>：局部变量，配合循环可搭密码学迭代（mulmod/powmod 等）。</li>
+        <li><b>Print / Output</b>：带 <code>exec</code> 进/出；有 Entry 时只走 exec 路径上的输出。</li>
+        <li><b>DoOnce / DoN / Gate / FlipFlop / MultiGate / Switch</b>：流程控制；Break/Continue 作用于最近循环。</li>
+        <li><b>端口内联字面量</b>：未连线的数据口可在节点内直接填值；已连线则隐藏输入框。</li>
+        <li><b>浮点预设</b>：FP16 / FP32 / FP64 / FP128 等；E/M 仍可任意手改。</li>
+        <li><b>端口折叠</b>：标题栏折叠钮优先隐藏<strong>未连接的数据端口</strong>；仍可整节点折叠。</li>
+        <li><b>数组 / 向量 / 矩阵 / Tensor</b>：Make / Get / Set / MatMul / Attention / LayerNorm 等，运行时走 SN。</li>
+        <li><b>示例</b>：RSA、Qwen3 toy、Transformer toy、数组求和等可从示例加载。</li>
+      </ul>
+      <h3>快捷键</h3>
+      <table class="keys">
+        <tr><td>Enter / Ctrl+Enter / R</td><td>运行图</td></tr>
+        <tr><td>Ctrl+Z</td><td>撤销</td></tr>
+        <tr><td>Ctrl+Y / Ctrl+Shift+Z</td><td>重做</td></tr>
+        <tr><td>Delete / Backspace</td><td>删除选中节点或连线</td></tr>
+        <tr><td>Esc</td><td>取消连线 / 关闭菜单 / 关闭对话框</td></tr>
+        <tr><td>Ctrl+A</td><td>全选当前画布节点</td></tr>
+        <tr><td>Ctrl+C / Ctrl+V / Ctrl+D</td><td>复制 / 粘贴 / 复制节点</td></tr>
+        <tr><td>Ctrl+X</td><td>剪切选中节点</td></tr>
+        <tr><td>F2 / Ctrl+E</td><td>编辑节点配置</td></tr>
+        <tr><td>Ctrl+Shift+C</td><td>导出 C 代码</td></tr>
+        <tr><td>Ctrl+S</td><td>导出工程 JSON</td></tr>
+        <tr><td>Ctrl+O</td><td>导入工程</td></tr>
+        <tr><td>Ctrl+N</td><td>新建自定义函数</td></tr>
+        <tr><td>Ctrl+Backspace</td><td>清空当前画布</td></tr>
+        <tr><td>Ctrl+Home</td><td>返回主画布</td></tr>
+        <tr><td>右键</td><td>上下文菜单（画布 / 节点 / 连线）</td></tr>
+        <tr><td>中键拖拽</td><td>平移画布</td></tr>
+        <tr><td>空格/Alt+左键拖拽</td><td>平移画布</td></tr>
+        <tr><td>Ctrl+滚轮</td><td>缩放画布</td></tr>
+        <tr><td>双指捏合</td><td>缩放画布（触控）</td></tr>
+        <tr><td>滚轮</td><td>上下平移视图（Shift+滚轮：左右）</td></tr>
+        <tr><td>Ctrl+0</td><td>重置视图到原点</td></tr>
+        <tr><td>Ctrl+Alt+T</td><td>切换深色 / 浅色主题</td></tr>
+        <tr><td>?</td><td>帮助</td></tr>
+      </table>
+      <menu><button value="ok" class="btn primary">知道了</button></menu>
+    </form>
+  </dialog>
+
+  <div id="ctxMenu" class="ctx-menu hidden" role="menu" aria-hidden="true"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
